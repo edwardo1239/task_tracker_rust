@@ -1,5 +1,9 @@
+
+
 use std::{error::Error, io::{self, Write}};
-use task_tracker_rust::{leer_data, Config, Tarea};
+
+use task_tracker_rust::{models::{config::Config, tarea::Tarea}, utils::io_utils::leer_data};
+
 
 fn main() {
     if let Err(e) = run() {
@@ -13,7 +17,7 @@ fn run () -> Result<(), Box<dyn Error>>{
         print!("task-cli  ");
         io::stdout().flush()?;
 
-        match leer_data() {
+        match leer_data () {
             Ok(input) => {
                 match Config::build(&input) {
                     Ok(config) => {

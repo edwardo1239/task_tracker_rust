@@ -1,8 +1,5 @@
 use std::{error::Error, io::{self, Write}};
-
-use task_tracker_rust::{leer_data, Config};
-
-
+use task_tracker_rust::{leer_data, Config, Tarea};
 
 fn main() {
     if let Err(e) = run() {
@@ -22,7 +19,8 @@ fn run () -> Result<(), Box<dyn Error>>{
                     Ok(config) => {
                         match config.comando.as_str() {
                             "add" => {
-                                println!("Hola add")
+                                let tarea = Tarea::build(&input);
+                                println!("{tarea:?}");
                             },
                             _ => {
                                 println!("Comando no reconocido")

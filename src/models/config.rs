@@ -9,8 +9,7 @@ pub struct Config {
 
 impl Config {
     pub fn build(input: &str) -> Result<Config, &'static str> {
-        let mut parts = input.split_whitespace();
-
+        let mut parts = input.splitn(2, ' '); 
         let comando = parts.next().ok_or("No se proporciono el comando")?;
         let dato = parts.next().ok_or("No se proporciono el dato")?;
 

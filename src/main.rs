@@ -1,9 +1,13 @@
+use std::{
+    error::Error,
+    io::{self, Write},
+};
 
-
-use std::{error::Error, io::{self, Write}};
-
-use task_tracker_rust::{models::{config::Config, tarea::Tarea}, utils::io_utils::leer_data};
-
+use task_tracker_rust::{
+    models::config::Config,
+    persistence::task_storage::{crear_tarea, listar_tareas},
+    utils::io_utils::leer_data,
+};
 
 fn main() {
     if let Err(e) = run() {
@@ -12,29 +16,33 @@ fn main() {
     }
 }
 
-fn run () -> Result<(), Box<dyn Error>>{
+fn run() -> Result<(), Box<dyn Error>> {
     loop {
         print!("task-cli  ");
         io::stdout().flush()?;
 
-        match leer_data () {
-            Ok(input) => {
-                match Config::build(&input) {
-                    Ok(config) => {
-                        match config.comando.as_str() {
-                            "add" => {
-                                let tarea = Tarea::build(&input);
-                                println!("{tarea:?}");
-                            },
-                            _ => {
-                                println!("Comando no reconocido")
-                            }
+        match leer_data() {
+            Ok(input) => match Config::build(&input) {
+                Ok(config) => match config.comando.as_str() {
+                    "add" => {
+                        match crear_tarea(config.dato.as_str()) {
+                            Ok(_) => println!("Tarea guardada con exito"),
+                            Err(err) => println!("Error {err}")
                         }
                     },
-                    Err(err) => eprintln!("{err}")
-                }
+                    "list" => {
+                        match listar_tareas() {
+                            Ok(_) => (),
+                            Err(err) => eprintln!("Error: {err}")
+                        }
+                    },
+                    _ => {
+                        println!("Comando no reconocido")
+                    }
+                },
+                Err(err) => eprintln!("{err}"),
             },
-            Err(err) => eprintln!("{err}")
+            Err(err) => eprintln!("{err}"),
         }
     }
 }

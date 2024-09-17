@@ -1,4 +1,8 @@
-use std::{fs::File, io::Write, path::Path};
+use std::collections::HashMap;
+use std::io::Write;
+use std::{fs::File, path::Path};
+
+use serde_json::Value;
 
 pub fn open_file() -> Result<File, String> {
     let path = Path::new("tasks.json");
@@ -13,4 +17,11 @@ pub fn open_file() -> Result<File, String> {
         }
     };
     Ok(file)
+}
+
+pub fn save_file(jsdon_data: HashMap<String, Value>) -> Result<(), String> {
+    let path = Path::new("tasks.json");
+    let mut file = File::create(&path).map_err(|err| err.to_string())?;
+    serde_json::to_writer(&mut file, &jsdon_data).map_err(|err| err.to_string())?;
+    Ok(())
 }

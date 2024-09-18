@@ -2,11 +2,26 @@ use std::{collections::HashMap, io::BufReader};
 
 use serde_json::Value;
 
-use crate::{models::tarea::Tarea, utils::file_utils::open_file};
+use crate::{models::{config::Config, tarea::Tarea}, utils::file_utils::open_file};
 
 pub fn crear_tarea(tarea: &str) -> Result<(), String> {
     let tarea = Tarea::build(&tarea)?;
     tarea.guardar()?;
+    Ok(())
+}
+
+pub fn modificar_tarea(config: Config) -> Result<(), String>{
+    Tarea::modificar_tarea(&config.comando, &config.dato)?;
+    Ok(())
+}
+
+pub fn borrar_tarea(id: &str) -> Result<(), String>{
+    Tarea::eliminar_tarea(&id)?;
+    Ok(())
+}
+
+pub fn mark_in_progress (id: &str) -> Result<(), String>{
+    Tarea::mark_in_progress(&id)?;
     Ok(())
 }
 

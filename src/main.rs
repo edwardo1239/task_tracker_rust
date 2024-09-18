@@ -5,7 +5,7 @@ use std::{
 
 use task_tracker_rust::{
     models::config::Config,
-    persistence::task_storage::{crear_tarea, listar_tareas},
+    persistence::task_storage::{borrar_tarea, crear_tarea, listar_tareas, mark_in_progress, modificar_tarea},
     utils::io_utils::leer_data,
 };
 
@@ -28,6 +28,29 @@ fn run() -> Result<(), Box<dyn Error>> {
                         match crear_tarea(config.dato.as_str()) {
                             Ok(_) => println!("Tarea guardada con exito"),
                             Err(err) => println!("Error {err}")
+                        }
+                    },
+                    "update" => {
+                        match Config::build(&config.dato.as_str()) {
+                            Ok(config_update) => {
+                                match modificar_tarea(config_update) {
+                                    Ok(_) => println!("Tarea guardada con exito"),
+                                    Err(err) => eprintln!("Error {err}")
+                                }
+                            },
+                            Err(err) => eprintln!("{err}")
+                        }
+                    },
+                    "delete" => {
+                        match borrar_tarea(&config.dato) {
+                            Ok(_) => println!("Tarea eliminada con exito"),
+                            Err(err) => eprintln!("Error {err}")
+                        }
+                    },
+                    "mark-in-progress" => {
+                        match mark_in_progress(&config.dato) {
+                            Ok(_) => println!("Tarea marcada en progreso"),
+                            Err(err) => eprintln!("Error {err}")
                         }
                     },
                     "list" => {

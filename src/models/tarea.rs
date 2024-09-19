@@ -16,11 +16,11 @@ pub struct Tarea {
 }
 
 impl Tarea {
-    pub fn build(input: &str) -> Result<Tarea, &'static str> {
+    pub fn build(input: &str) -> Result<Tarea, String> {
         let now = SystemTime::now();
         let datetime = now.into();
 
-        let id = create_unique_id();
+        let id = create_unique_id()?;
 
         Ok(Tarea {
             id: id,
@@ -89,6 +89,22 @@ impl Tarea {
         Ok(())
     }
 
+    pub fn mark_done(id: &str) -> Result<(), String> {
+        let file = open_file()?;
+
+        let mut json_data = Self::crear_json(file)?;
+
+        if let Some(tarea) = json_data.get_mut(id){
+            if let Some(tarea_obj) = tarea.as_object_mut() {
+                tarea_obj["status"] = json!("done".to_string());
+            }
+        } else {
+            return Err(format!("No se encontro la tarea con el id: {id}"));
+        }
+        save_file(json_data)?;
+        Ok(())
+    }
+
     fn crear_json (file:File) -> Result<HashMap<String, Value>, String>{
         let reader = BufReader::new(file);
         let jsdon_data: HashMap<String, Value> =
@@ -96,4 +112,5 @@ impl Tarea {
 
         Ok(jsdon_data)
     }
+
 }

@@ -86,6 +86,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- [roadmap.sh](https://roadmap.sh) for providing the project idea and guidelines
+- [roadmap.sh](https://roadmap.sh/projects/task-tracker) for providing the project idea and guidelines
 - The Rust community for their excellent documentation and resources
 

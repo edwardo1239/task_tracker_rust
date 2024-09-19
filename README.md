@@ -24,7 +24,7 @@ This Task Tracker CLI is part of the practical projects series from [roadmap.sh]
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/task-tracker-rust.git
+   git clone https://github.com/edwardo1239/task_tracker_rust
    cd task-tracker-rust
    ```
 
